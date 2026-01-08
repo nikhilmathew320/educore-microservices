@@ -1,0 +1,16 @@
+services:
+  student-db:
+    image: postgres:15-alpine
+    container_name: student_postgres
+    environment:
+      POSTGRES_USER: ${STUDENT_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${STUDENT_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${STUDENT_POSTGRES_DB}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker-init:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres_data:
