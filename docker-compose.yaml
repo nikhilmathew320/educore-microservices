@@ -7,10 +7,24 @@ services:
       POSTGRES_PASSWORD: ${STUDENT_POSTGRES_PASSWORD}
       POSTGRES_DB: ${STUDENT_POSTGRES_DB}
     ports:
-      - "${DB_PORT}:5432"
+      - "${STUDENT_DB_PORT}:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - student_postgres_data:/var/lib/postgresql/data
+      - ./docker-init:/docker-entrypoint-initdb.d
+
+  school-db:
+    image: postgres:15-alpine
+    container_name: school_postgres
+    environment:
+      POSTGRES_USER: ${SCHOOL_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${SCHOOL_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${SCHOOL_POSTGRES_DB}
+    ports:
+      - "${SCHOOL_DB_PORT}:5432"
+    volumes:
+      - school_postgres_data:/var/lib/postgresql/data
       - ./docker-init:/docker-entrypoint-initdb.d
 
 volumes:
-  postgres_data:
+  student_postgres_data:
+  school_postgres_data:

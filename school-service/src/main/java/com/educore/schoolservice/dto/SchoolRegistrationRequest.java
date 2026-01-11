@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record SchoolRegistrationRequest(
         @NotBlank(message = "School name is required")
-        String name,
+        String schoolName,
 
         @NotBlank(message = "Email is required")
         @Email(message = "invalid email format")
