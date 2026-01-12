@@ -3,11 +3,13 @@ package com.educore.schoolservice.service.impl;
 import com.educore.schoolservice.domain.School;
 import com.educore.schoolservice.dto.SchoolRegistrationRequest;
 import com.educore.schoolservice.dto.SchoolResponse;
+import com.educore.schoolservice.dto.StudentResponse;
 import com.educore.schoolservice.entity.SchoolEntity;
 import com.educore.schoolservice.exception.ResourceNotFoundException;
 import com.educore.schoolservice.mapper.SchoolMapper;
 import com.educore.schoolservice.repository.SchoolRepository;
 import com.educore.schoolservice.service.SchoolService;
+import com.educore.schoolservice.service.client.StudentClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     private final SchoolRepository schoolRepository;
     private final SchoolMapper schoolMapper;
+    private final StudentClient studentClient;
 
     @Override
     @Transactional
@@ -37,7 +40,16 @@ public class SchoolServiceImpl implements SchoolService {
         return schoolRepository.findAll()
                 .stream()
                 .map(schoolMapper::toDomain)
-                .map(schoolMapper::toResponse)
+                .map(schoolDomain -> {
+                    List<StudentResponse> students = studentClient.findAllStudentsBySchool(schoolDomain.getSchoolId());
+                    return new SchoolResponse(
+                            schoolDomain.getSchoolId(),
+                            schoolDomain.getSchoolName(),
+                            schoolDomain.getEmail(),
+                            schoolDomain.getPrincipalName(),
+                            students
+                    );
+                })
                 .collect(Collectors.toList());
     }
 

@@ -23,5 +23,6 @@ public interface SchoolMapper {
 
     School toDomain(SchoolEntity schoolEntity);
 
+    @Mapping(target = "students", ignore = true)
     SchoolResponse toResponse(School school);
 }
