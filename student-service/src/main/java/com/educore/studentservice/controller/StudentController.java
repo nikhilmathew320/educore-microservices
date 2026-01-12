@@ -39,7 +39,7 @@ public class StudentController {
     }
 
     @GetMapping("/school/{school-id}")
-    public List<StudentResponse> findAllStudentsBySchool(@PathVariable("id") Integer id) {
+    public List<StudentResponse> findAllStudentsBySchool(@PathVariable("school-id") Integer id) {
         return studentService.findAllStudentsBySchool(id);
     }
 }

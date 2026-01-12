@@ -46,7 +46,7 @@ public class StudentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));
     }
 
-    public List<StudentResponse> findAllStudentsBySchool(Integer schoolId){
+    public List<StudentResponse> findAllStudentsBySchool(Integer schoolId) {
         return studentRepository.findAllBySchoolId(schoolId)
                 .stream()
                 .map(studentMapper::toDomain)
