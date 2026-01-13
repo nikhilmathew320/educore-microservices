@@ -2,6 +2,7 @@ package com.educore.schoolservice.controller;
 
 import com.educore.schoolservice.dto.SchoolRegistrationRequest;
 import com.educore.schoolservice.dto.SchoolResponse;
+import com.educore.schoolservice.service.SchoolOrchestrator;
 import com.educore.schoolservice.service.SchoolService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 public class SchoolController {
 
     private final SchoolService schoolService;
+    private final SchoolOrchestrator schoolOrchestrator;
 
     @PostMapping
     public ResponseEntity<SchoolResponse> schoolRegistration(@RequestBody @Valid SchoolRegistrationRequest request){
@@ -26,7 +28,7 @@ public class SchoolController {
 
     @GetMapping
     public List<SchoolResponse> findAllSchools(){
-        return schoolService.getAllSchools();
+        return schoolOrchestrator.getAllSchools();
     }
 
     @GetMapping("/{id}")

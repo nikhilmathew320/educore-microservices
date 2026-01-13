@@ -18,7 +18,7 @@ public interface SchoolService {
      *
      * @return List of all school details
      */
-    List<SchoolResponse> getAllSchools();
+    List<SchoolResponse> getAllSchoolsWithoutStudents();
 
     /**
      *
