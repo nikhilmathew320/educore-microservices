@@ -36,20 +36,11 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SchoolResponse> getAllSchools() {
+    public List<SchoolResponse> getAllSchoolsWithoutStudents() {
         return schoolRepository.findAll()
                 .stream()
                 .map(schoolMapper::toDomain)
-                .map(schoolDomain -> {
-                    List<StudentResponse> students = studentClient.findAllStudentsBySchool(schoolDomain.getSchoolId());
-                    return new SchoolResponse(
-                            schoolDomain.getSchoolId(),
-                            schoolDomain.getSchoolName(),
-                            schoolDomain.getEmail(),
-                            schoolDomain.getPrincipalName(),
-                            students
-                    );
-                })
+                .map(schoolMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
