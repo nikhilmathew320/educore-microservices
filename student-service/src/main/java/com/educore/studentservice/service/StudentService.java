@@ -4,12 +4,15 @@ import com.educore.studentservice.domain.Student;
 import com.educore.studentservice.dto.StudentRegistrationRequest;
 import com.educore.studentservice.dto.StudentResponse;
 import com.educore.studentservice.entity.StudentEntity;
+import com.educore.studentservice.event.StudentCreatedEvent;
+import com.educore.studentservice.event.StudentProducer;
 import com.educore.studentservice.exception.ResourceNotFoundException;
 import com.educore.studentservice.exception.StudentAlreadyExistsException;
 import com.educore.studentservice.mapper.StudentMapper;
 import com.educore.studentservice.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +23,9 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
+    private final StudentProducer studentProducer;
 
+    @Transactional
     public StudentResponse registerStudent(StudentRegistrationRequest studentRegistrationRequest) {
         if (studentRepository.existsByEmail(studentRegistrationRequest.email())) {
            throw new StudentAlreadyExistsException("Student already exists with this email:" + studentRegistrationRequest.email());
@@ -28,6 +33,13 @@ public class StudentService {
         Student student = studentMapper.toDomain(studentRegistrationRequest);
         StudentEntity studentEntity = studentMapper.toEntity(student);
         StudentEntity savedStudentEntity = studentRepository.save(studentEntity);
+        StudentCreatedEvent event = new StudentCreatedEvent(
+                savedStudentEntity.getStudentId(),
+                savedStudentEntity.getFirstName(),
+                savedStudentEntity.getLastName(),
+                savedStudentEntity.getEmail()
+        );
+        studentProducer.sendStudentCreatedEvent(event);
         return studentMapper.toResponse(studentMapper.toDomain(savedStudentEntity));
     }
 
