@@ -15,6 +15,7 @@
         <module>config-server</module>
         <module>school-service</module>
         <module>api-gateway</module>
+        <module>identity-service</module>
     </modules>
 
     <properties>
