@@ -25,6 +25,19 @@ services:
       - school_postgres_data:/var/lib/postgresql/data
       - ./docker-init:/docker-entrypoint-initdb.d
 
+  identity-db:
+    image: postgres:15-alpine
+    container_name: identity_postgres
+    environment:
+      POSTGRES_USER: ${IDENTITY_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${IDENTITY_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${IDENTITY_POSTGRES_DB}
+    ports:
+      - "${IDENTITY_DB_PORT}:5432"
+    volumes:
+      - identity_postgres_data:/var/lib/postgresql/data
+      - ./docker-init:/docker-entrypoint-initdb.d
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
@@ -72,3 +85,4 @@ volumes:
   zookeeper_data:
   zookeeper_log:
   kafka_data:
+  identity_postgres_data:
