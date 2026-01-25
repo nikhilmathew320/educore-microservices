@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-user-credential-table
+      author: educore-admin
+      changes:
+        - createTable:
+            tableName: user_credential
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 002-insert-test-admin
+      author: educore-admin
+      changes:
+        - insert:
+            tableName: user_credential
+            columns:
+              - column:
+                  name: name
+                  value: "admin"
+              - column:
+                  name: email
+                  value: "admin@educore.com"
+              - column:
+                  name: password
+                  value: "$2a$10$YaZIJgX6uRwxSFZZvKKGPe7pZC3XH.cwxiC2Gkt6/Po1dLTPh3Fhu"
